@@ -14,7 +14,7 @@ class TodosController extends Controller
      */
     public function index()
     {
-        return Todo::all();
+        return Todo::where('user_id',auth()->user()->id)->get();
     }
 
 
@@ -32,7 +32,12 @@ class TodosController extends Controller
             'done' => 'required|boolean',
         ]);
 
-        $todo = Todo::create($data);
+        $todo = Todo::create([
+
+            'user_id' => auth()->user()->id,
+            'title' => $request->title,
+            'done' => $request->done
+        ]);
 
         return response($todo, 201);
     }
